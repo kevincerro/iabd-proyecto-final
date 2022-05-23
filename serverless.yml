@@ -1,0 +1,24 @@
+service: iabd-proyecto-final
+
+provider:
+    deploymentMethod: direct
+    name: aws
+    region: eu-west-3
+    stage: prod
+    runtime: python3.9
+
+plugins:
+  - serverless-wsgi
+  - serverless-python-requirements
+
+custom:
+  wsgi:
+    app: main.app
+
+functions:
+  app:
+    handler: wsgi_handler.handler
+    events:
+      - httpApi: '*'
+
+
