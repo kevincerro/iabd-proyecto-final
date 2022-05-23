@@ -1,8 +1,11 @@
 # Proyecto final IABD CRK
 
 ## Setup
-1. Create virtual env: `python3 -m venv venv`
-2. Activate created virtual env: `. venv/bin/activate`
-3. Install dependencies: `pip install -r requirements.txt`
-4. Fill .env with your azure credentials
-5. Run this command in console: `flask run`
+1. Fill .env with your credentials
+2. Run this command in terminal: `docker-compose up -d`
+
+## Usage
+Open "http://127.0.0.1:5000" in your browser
+
+Note: if using http proxy with docker you can also open "http://iabd.docker"  
+(https://github.com/codekitchen/dinghy-http-proxy)

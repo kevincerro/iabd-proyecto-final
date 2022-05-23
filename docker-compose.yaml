@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: iabd
+      MYSQL_DATABASE: iabd
+      MYSQL_USER: iabd
+      MYSQL_PASSWORD: iabd
+    restart: always
+
+  phpmyadmin:
+    image: phpmyadmin
+    depends_on:
+      - mysql
+    environment:
+      VIRTUAL_HOST: db.iabd.docker
+      PMA_HOST: mysql
+      MYSQL_USER: iabd
+      MYSQL_ROOT_PASSWORD: iabd
+    restart: always
+
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    depends_on:
+      - mysql
+    ports:
+      - "5000:5000"
+    environment:
+      VIRTUAL_HOST: iabd.docker
+    volumes:
+      - .:/var/www
+    restart: always
+
+volumes:
+  db-data:
