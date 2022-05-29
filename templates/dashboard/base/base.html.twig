@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% include 'dashboard/base/head.html.twig' %}
+    {% block stylesheets %}
+        <link href="{{ url_for('static', filename='dashboard/css/main.css') }}" rel="stylesheet">
+    {% endblock %}
+</head>
+<body>
+{% block body %}
+    <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        {% include 'dashboard/base/header.html.twig' %}
+        <div class="app-main">
+            {% include 'dashboard/base/sidebar.html.twig' %}
+            <div class="app-main__outer">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/main.js') }}"></script>
+{% endblock %}
+</body>
+</html>
