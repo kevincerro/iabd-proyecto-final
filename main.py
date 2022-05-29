@@ -17,6 +17,8 @@ user.init()
 # Import services
 from src.service import google_login
 google_login.init(app)
+from src.service import user_manager
+user_manager.init(app)
 # Import controllers
 from src.controller import homepage
 app.register_blueprint(homepage.mod)
