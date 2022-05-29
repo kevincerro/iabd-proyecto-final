@@ -1,4 +1,6 @@
 from flask_login import UserMixin
+from sqlalchemy.orm import relationship
+
 from main import db
 from sqlalchemy import func
 
@@ -15,6 +17,7 @@ class User(UserMixin, db.Model):
     google_id = db.Column(db.String(255), index=True, unique=True, nullable=False)
     is_admin = db.Column(db.Boolean, index=False, unique=False, nullable=False, server_default='0')
     enabled = db.Column(db.Boolean, index=False, unique=False, nullable=False, server_default='1')
+    text_to_speech = relationship('TextToSpeech')
     created_at = db.Column(db.DateTime, index=False, unique=False, nullable=False, server_default=func.now())
     updated_at = db.Column(db.DateTime, index=False, unique=False, nullable=False, server_default=func.now())
 
