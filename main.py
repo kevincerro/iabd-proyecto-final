@@ -1,6 +1,15 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+import os
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+# Import models
+from src.entity import user
 
 # Import controllers
 from src.controller import homepage
@@ -15,4 +24,3 @@ def error_not_found(e):
 @app.errorhandler(500)
 def error_not_found(e):
     return '<p>500 Internal Server Error</p>'
-
