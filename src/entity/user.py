@@ -1,4 +1,9 @@
 from main import db
+from sqlalchemy import func
+
+
+def init():
+    pass
 
 
 class User(db.Model):
@@ -8,8 +13,8 @@ class User(db.Model):
     email = db.Column(db.String(255), index=True, unique=True, nullable=False)
     google_id = db.Column(db.String(255), index=True, unique=True, nullable=False)
     is_admin = db.Column(db.Boolean, index=False, unique=False, nullable=False)
-    created_at = db.Column(db.DateTime, index=False, unique=False, nullable=False)
-    updated_at = db.Column(db.DateTime, index=False, unique=False, nullable=False)
+    created_at = db.Column(db.DateTime, index=False, unique=False, nullable=False, server_default=func.now())
+    updated_at = db.Column(db.DateTime, index=False, unique=False, nullable=False, server_default=func.now())
 
     def __repr__(self):
         return "<User {}>".format(self.username)
