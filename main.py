@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_session import Session
 import os
 
 app = Flask(__name__)
@@ -7,8 +8,16 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-
+# Initialize db
 db = SQLAlchemy(app)
+
+# Initialize session
+app.config['SESSION_TYPE'] = 'sqlalchemy'
+app.config['SESSION_USE_SIGNER'] = True
+app.config['SESSION_SQLALCHEMY'] = db
+app.config['SESSION_SQLALCHEMY_TABLE'] = 'Sessions'
+app.config['PERMANENT_SESSION_LIFETIME'] = 604800  # 7 days
+Session(app)
 
 # Import models
 from src.entity import user
@@ -19,6 +28,7 @@ from src.service import google_login
 google_login.init(app)
 from src.service import user_manager
 user_manager.init(app)
+
 # Import controllers
 from src.controller import homepage
 app.register_blueprint(homepage.mod)
