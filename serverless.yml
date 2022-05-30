@@ -8,17 +8,23 @@ provider:
     runtime: python3.9
 
 plugins:
-  - serverless-wsgi
-  - serverless-python-requirements
+    - serverless-wsgi
+    - serverless-python-requirements
+    - serverless-lift
 
 custom:
-  wsgi:
-    app: main.app
+    wsgi:
+        app: main.app
 
 functions:
-  app:
-    handler: wsgi_handler.handler
-    events:
-      - httpApi: '*'
+    app:
+        handler: wsgi_handler.handler
+        events:
+            -   httpApi: '*'
 
-
+constructs:
+    website:
+        type: server-side-website
+        assets:
+            '/static/*': static
+            
