@@ -1,0 +1,52 @@
+{% extends 'dashboard/base/base.html.twig' %}
+
+{% block content %}
+    <div class="app-main__inner">
+        <div class="app-page-title">
+            <div class="page-title-wrapper">
+                <div class="page-title-heading">
+                    <div class="page-title-icon">
+                        <i class="pe-7s-timer"></i>
+                    </div>
+                    <div>
+                        Crear
+                        <div class="page-title-subheading">
+                            Aquí puedes crear una nueva conversión de texto a voz.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="main-card mb-3 card">
+                    <div class="card-body">
+                        <form action="" method="post">
+                            {{ form.hidden_tag() }}
+
+                            <div class="position-relative form-group">
+                                {{ form.name.label }}
+                                {{ form.name }}
+                                {% for error in form.name.errors %}
+                                    <br>
+                                    <span style="color: red;">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="position-relative form-group">
+                                {{ form.text.label }}
+                                {{ form.text }}
+                                {% for error in form.text.errors %}
+                                    <br>
+                                    <span style="color: red;">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            {{ form.submit() }}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

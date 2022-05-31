@@ -25,6 +25,8 @@ Session(app)
 # Import models
 from src.entity import user
 user.init()
+from src.entity import text_to_speech
+text_to_speech.init()
 
 # Import services
 from src.service import google_login
@@ -35,6 +37,8 @@ user_manager.init(app)
 # Import controllers
 from src.controller import homepage
 app.register_blueprint(homepage.mod)
+from src.controller import dashboard
+app.register_blueprint(dashboard.mod)
 
 
 @app.errorhandler(404)
