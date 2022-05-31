@@ -6,6 +6,10 @@ provider:
     region: eu-west-3
     stage: prod
     runtime: python3.9
+    environment:
+        STRIP_STAGE_PATH: yes
+        FLASK_APP: main
+        FLASK_ENV: production
 
 plugins:
     - serverless-wsgi
@@ -27,4 +31,12 @@ constructs:
         type: server-side-website
         assets:
             '/static/*': static
+            
+package:
+    patterns:
+        - '!static/**'
+        - '!venv/**'
+        - '!.idea/**'
+        - '!.flaskenv'
+        - '!.env'
             
