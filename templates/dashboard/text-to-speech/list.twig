@@ -35,7 +35,6 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Nombre</th>
                                     <th>Texto</th>
                                     <th>Audio</th>
                                     <th>Fecha de creación</th>
@@ -50,9 +49,19 @@
                                 {% for conversion in conversions | sort(attribute='id', reverse=True) %}
                                     <tr>
                                         <td>{{ conversion.id }}</td>
-                                        <td>{{ conversion.name }}</td>
-                                        <td>{{ conversion.text }}</td>
-                                        <td>{{ conversion.audio }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-dark" data-toggle="popover" data-placement="bottom" data-content="{{ conversion.text }}">
+                                                <i class="fa fa-eye fa-w-20"></i>
+                                                Mostrar texto
+                                            </button>
+                                        </td>
+                                        <td>
+                                            {% set speech_url = aws_service.get_presigned_speech_url(conversion.speech) %}
+                                            <audio controls>
+                                              <source src="{{ speech_url }}" type="audio/mpeg">
+                                            <a href="{{ speech_url }}">Descargar</a>
+                                            </audio>
+                                        </td>
                                         <td>{{ conversion.created_at }}</td>
                                     </tr>
                                 {% endfor %}

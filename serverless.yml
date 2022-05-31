@@ -10,6 +10,15 @@ provider:
         STRIP_STAGE_PATH: yes
         FLASK_APP: main
         FLASK_ENV: production
+        UPLOADS_BUCKET: ${construct:uploads.bucketName}
+        
+    iam:
+        role:
+            statements:
+                -   Effect: "Allow"
+                    Action:
+                        - 'polly:SynthesizeSpeech'
+                    Resource: '*'
 
 plugins:
     - serverless-wsgi
@@ -31,6 +40,8 @@ constructs:
         type: server-side-website
         assets:
             '/static/*': static
+    uploads:
+        type: storage
             
 package:
     patterns:

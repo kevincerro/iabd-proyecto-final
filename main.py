@@ -33,6 +33,8 @@ from src.service import google_login
 google_login.init(app)
 from src.service import user_manager
 user_manager.init(app)
+from src.service import aws_service
+aws_service.init(app)
 
 # Import controllers
 from src.controller import homepage
@@ -40,12 +42,15 @@ app.register_blueprint(homepage.mod)
 from src.controller import dashboard
 app.register_blueprint(dashboard.mod)
 
+# Configure jinja global variables
+app.jinja_env.globals.update(aws_service=aws_service)
+
 
 @app.errorhandler(404)
-def error_not_found(e):
+def error_not_found():
     return '<p>404 Not found</p>'
 
 
 @app.errorhandler(500)
-def error_not_found(e):
+def error_internal_server_error():
     return '<p>500 Internal Server Error</p>'

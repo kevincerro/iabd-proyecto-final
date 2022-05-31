@@ -8,7 +8,7 @@ mod = Blueprint('homepage', __name__, url_prefix='/')
 @mod.route('/')
 def index():
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('dashboard.index'))
     else:
         return redirect(url_for('homepage.login'))
 
