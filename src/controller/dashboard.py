@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for
 from flask_login import login_required, logout_user, current_user
-
 from main import db
 from src.entity.text_to_speech import TextToSpeech
 from src.form.text_to_speech_form import TextToSpeechForm
+from src.service import aws_service
 
 mod = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
@@ -29,13 +29,15 @@ def new_text_to_speech():
 
     if form.validate_on_submit():
         # Read form data
-        name = form.name.data
         text = form.text.data
+
+        # Process with AWS Polly
+        file_name = aws_service.text_to_speech(text)
 
         # Store in db
         user = TextToSpeech(
-            name=name,
             text=text,
+            speech=file_name,
             created_by=current_user.id
         )
         db.session.add(user)
