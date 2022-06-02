@@ -27,6 +27,8 @@ from src.entity import user
 user.init()
 from src.entity import text_to_speech
 text_to_speech.init()
+from src.entity import speech_to_text
+speech_to_text.init()
 
 # Import services
 from src.service import google_login

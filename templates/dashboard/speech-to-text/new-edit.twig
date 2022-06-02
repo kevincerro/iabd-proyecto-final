@@ -1,0 +1,73 @@
+{% extends 'dashboard/base/base.html.twig' %}
+
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static', filename='dashboard/js/s3file_loader.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="app-main__inner">
+    <div class="app-page-title">
+        <div class="page-title-wrapper">
+            <div class="page-title-heading">
+                <div class="page-title-icon">
+                    <i class="pe-7s-timer"></i>
+                </div>
+                <div>
+                    Crear
+                    <div class="page-title-subheading">
+                        Aquí puedes crear una nueva conversión de voz a texto.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="main-card mb-3 card">
+                <div class="card-body">
+                    <form id="form" method="post">
+                        {{ form.hidden_tag() }}
+
+                        <div class="position-relative form-group">
+                            <div>
+                                {{ form.speech.label }}
+                                <div class="s3upload">
+                                    {{ form.file_name }}
+                                    {{ form.file_mime_type }}
+                                    {{ form.speech }}
+                                    {% for error in form.speech.errors %}
+                                        <br>
+                                        <span style="color: red;">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function (event) {
+                                        {% set file_name = aws_service.generate_random_file_name() %}
+
+                                        let form = document.getElementById('form');
+                                        form.onsubmit = function (e) {
+                                            e.preventDefault();
+                                            uploadFileToS3({
+                                                fileElement: document.getElementById('{{ form.speech.id }}'),
+                                                fileNameElement: document.getElementById('{{ form.file_name.id }}'),
+                                                fileMimeTypeElement: document.getElementById('{{ form.file_mime_type.id }}'),
+                                                fileUrl: '{{ aws_service.get_presigned_upload_speech_url(file_name) }}',
+                                                fileName: '{{ file_name }}'
+                                            }).then(() => {
+                                                form.submit()
+                                            })
+                                        }
+                                    });
+                                </script>
+                            </div>
+                        </div>
+
+                        {{ form.btn_submit() }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
