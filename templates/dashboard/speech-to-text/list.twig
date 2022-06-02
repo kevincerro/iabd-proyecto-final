@@ -1,0 +1,77 @@
+{% extends 'dashboard/base/base.html.twig' %}
+
+{% block content %}
+    <div class="app-main__inner">
+        <div class="app-page-title">
+            <div class="page-title-wrapper">
+                <div class="page-title-heading">
+                    <div class="page-title-icon">
+                        <i class="pe-7s-speaker"></i>
+                    </div>
+                    <div>
+                        Speech-To-Text
+                        <div class="page-title-subheading">
+                            Aquí puedes gestionar todas las conversiones de voz a texto.
+                        </div>
+                    </div>
+                </div>
+                <div class="page-title-actions">
+                    <div class="d-inline-block dropdown">
+                        <a href="{{ url_for('dashboard.new_speech_to_text') }}" type="button" aria-haspopup="true" aria-expanded="false" class="btn btn-lg btn-primary">
+                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="fa fa-plus fa-w-20"></i>
+                            </span>
+                            <strong>Nuevo</strong>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="main-card mb-3 card">
+                    <div class="card-body table-responsive"><h5 class="card-title">Speech-To-Text</h5>
+                        <table class="mb-0 table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Audio</th>
+                                    <th>Texto</th>
+                                    <th>Fecha de creación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if conversions | length == 0 %}
+                                    <tr>
+                                        <td colspan="100%">No hay ningún resultado</td>
+                                    </tr>
+                                {% endif %}
+                                {% for conversion in conversions | sort(attribute='id', reverse=True) %}
+                                    <tr>
+                                        <td>{{ conversion.id }}</td>
+                                        <td>
+                                            {% set speech_url = aws_service.get_presigned_speech_url(conversion.speech) %}
+                                            <audio controls>
+                                              <source src="{{ speech_url }}" type="audio/mpeg">
+                                            <a href="{{ speech_url }}">Descargar</a>
+                                            </audio>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-dark" data-toggle="popover" data-placement="bottom" data-content="{{ conversion.text }}">
+                                                <i class="fa fa-eye fa-w-20"></i>
+                                                Mostrar texto
+                                            </button>
+                                        </td>
+                                        <td>{{ conversion.created_at }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="navigation">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
