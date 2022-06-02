@@ -56,7 +56,7 @@
                                             </button>
                                         </td>
                                         <td>
-                                            {% set speech_url = aws_service.get_presigned_speech_url(conversion.speech) %}
+                                            {% set speech_url = aws_service.get_presigned_file_url('text_to_speech', conversion.speech) %}
                                             <audio controls>
                                               <source src="{{ speech_url }}" type="audio/mpeg">
                                             <a href="{{ speech_url }}">Descargar</a>

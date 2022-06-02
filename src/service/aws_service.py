@@ -1,8 +1,12 @@
+import json
 import os
 import tempfile
 import time
-
+from urllib.request import urlopen
 from boto3 import Session
+from botocore.exceptions import ClientError
+
+UPLOADS_TEMP_DIR = 'tmp_uploads/'
 
 session = Session()
 polly = session.client('polly')
@@ -28,21 +32,25 @@ def text_to_speech(text):
     return upload_speech_to_s3(response['AudioStream'].read())
 
 
-def speech_to_text(file_url):
+def speech_to_text(file_name):
+    file_path = 's3://' + s3_bucket + '/speech_to_text/' + file_name
+
     transcribe.start_transcription_job(
-        TranscriptionJobName=file_url,
-        Media={'MediaFileUri': file_url},
+        TranscriptionJobName=file_name,
+        Media={'MediaFileUri': file_path},
         MediaFormat='mp3',
         LanguageCode='es-ES'
     )
 
-    max_tries = 10
+    max_tries = 60
     while max_tries > 0:
         max_tries -= 1
-        job = transcribe.get_transcription_job(TranscriptionJobName=file_url)
+        job = transcribe.get_transcription_job(TranscriptionJobName=file_name)
         job_status = job['TranscriptionJob']['TranscriptionJobStatus']
         if job_status == 'COMPLETED':
-            return job['TranscriptionJob']['Transcript']['TranscriptFileUri']
+            jsonurl = urlopen(job['TranscriptionJob']['Transcript']['TranscriptFileUri'])
+            data = json.loads(jsonurl.read())
+            return data['results']['transcripts'][0]['transcript']
         time.sleep(1)
 
     raise Exception('Cannot convert speech-to-text')
@@ -60,12 +68,12 @@ def upload_speech_to_s3(blob):
         return file_name
 
 
-def get_presigned_speech_url(speech):
+def get_presigned_file_url(folder, file_name):
     return s3.generate_presigned_url(
         'get_object',
         Params={
             'Bucket': s3_bucket,
-            'Key': 'text_to_speech/' + speech
+            'Key': folder + '/' + file_name
         },
         ExpiresIn=3600
     )
@@ -81,7 +89,44 @@ def get_presigned_upload_speech_url(file_name):
         'put_object',
         Params={
             'Bucket': s3_bucket,
-            'Key': 'tmp_uploads/' + file_name
+            'Key': UPLOADS_TEMP_DIR + file_name
         },
         ExpiresIn=3600
+    )
+
+
+def does_object_exists_in_temp(file_name):
+    file_name_without_extension = file_name.split('.')[0]
+    path = UPLOADS_TEMP_DIR + file_name_without_extension
+
+    try:
+        s3.head_object(Bucket=s3_bucket, Key=path)
+        return True
+    except ClientError:
+        return False
+
+
+def copy_object_from_temp_to_dest(file_name, dest_folder, mime_type):
+    file_name_without_extension = file_name.split('.')[0]
+    source_file = s3_bucket + '/' + UPLOADS_TEMP_DIR + file_name_without_extension
+    dest_file_name = generate_random_file_name()
+    dest_file = dest_folder + '/' + dest_file_name
+
+    s3.copy_object(
+        Bucket=s3_bucket,
+        Key=dest_file,
+        CopySource=source_file,
+        ContentType=mime_type,
+        MetadataDirective='REPLACE'
+    )
+
+    return dest_file_name
+
+
+def delete_object_from_temp(file_name):
+    file_name_without_extension = file_name.split('.')[0]
+
+    s3.delete_object(
+        Bucket=s3_bucket,
+        Key=UPLOADS_TEMP_DIR + file_name_without_extension
     )
