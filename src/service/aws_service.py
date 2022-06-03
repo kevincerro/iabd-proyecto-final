@@ -84,7 +84,7 @@ def generate_random_file_name():
         return os.path.basename(file_name.name)
 
 
-def get_presigned_upload_speech_url(file_name):
+def get_presigned_upload_url(file_name):
     return s3.generate_presigned_url(
         'put_object',
         Params={

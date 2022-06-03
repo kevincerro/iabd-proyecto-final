@@ -44,6 +44,11 @@
                         <i class="metismenu-icon pe-7s-note"></i>Speech-To-Text
                     </a>
                 </li>
+                <li>
+                    <a href="{{ url_for('dashboard.image_to_text') }}" class="{{ 'mm-active' if request.endpoint == 'dashboard.image_to_text' }}">
+                        <i class="metismenu-icon pe-7s-photo"></i>Image-To-Text
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
