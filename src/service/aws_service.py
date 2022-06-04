@@ -11,6 +11,7 @@ UPLOADS_TEMP_DIR = 'tmp_uploads/'
 session = Session()
 polly = session.client('polly')
 transcribe = session.client('transcribe')
+rekognition = session.client('rekognition')
 s3 = session.client('s3')
 s3_bucket: str = os.getenv('UPLOADS_BUCKET')
 
@@ -56,6 +57,20 @@ def speech_to_text(file_name):
     raise Exception('Cannot convert speech-to-text')
 
 
+def image_to_text(file_name):
+    file_path = 's3://' + s3_bucket + '/image_to_text/' + file_name
+
+    response = rekognition.detect_text(Image={
+        'S3Object': {
+            'Bucket': s3_bucket,
+            'Name': 'image_to_text/' + file_name
+        }
+    })
+    texts = [text['DetectedText'] for text in response['TextDetections'] if text['Type'] == 'LINE']
+
+    return ' '.join(texts)
+
+
 def upload_speech_to_s3(blob):
     with tempfile.NamedTemporaryFile(suffix='.mp3') as t:
         file_name = os.path.basename(t.name)
@@ -84,7 +99,7 @@ def generate_random_file_name():
         return os.path.basename(file_name.name)
 
 
-def get_presigned_upload_speech_url(file_name):
+def get_presigned_upload_url(file_name):
     return s3.generate_presigned_url(
         'put_object',
         Params={

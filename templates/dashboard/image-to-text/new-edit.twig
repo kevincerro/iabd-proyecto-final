@@ -16,7 +16,7 @@
                 <div>
                     Crear
                     <div class="page-title-subheading">
-                        Aquí puedes crear una nueva conversión de voz a texto.
+                        Aquí puedes crear una nueva conversión de imagen a texto.
                     </div>
                 </div>
             </div>
@@ -31,12 +31,12 @@
 
                         <div class="position-relative form-group">
                             <div>
-                                {{ form.speech.label }}
+                                {{ form.image.label }}
                                 <div class="s3upload">
                                     {{ form.file_name }}
                                     {{ form.file_mime_type }}
-                                    {{ form.speech }}
-                                    {% for error in form.speech.errors %}
+                                    {{ form.image }}
+                                    {% for error in form.image.errors %}
                                         <br>
                                         <span style="color: red;">{{ error }}</span>
                                     {% endfor %}
@@ -49,7 +49,7 @@
                                         form.onsubmit = function (e) {
                                             e.preventDefault();
                                             uploadFileToS3({
-                                                fileElement: document.getElementById('{{ form.speech.id }}'),
+                                                fileElement: document.getElementById('{{ form.image.id }}'),
                                                 fileNameElement: document.getElementById('{{ form.file_name.id }}'),
                                                 fileMimeTypeElement: document.getElementById('{{ form.file_mime_type.id }}'),
                                                 fileUrl: '{{ aws_service.get_presigned_upload_url(file_name) }}',

@@ -18,11 +18,13 @@ class User(UserMixin, db.Model):
     is_admin = db.Column(db.Boolean, index=False, unique=False, nullable=False, server_default='0')
     enabled = db.Column(db.Boolean, index=False, unique=False, nullable=False, server_default='1')
     text_to_speech = relationship('TextToSpeech')
+    speech_to_text = relationship('SpeechToText')
+    image_to_text = relationship('ImageToText')
     created_at = db.Column(db.DateTime, index=False, unique=False, nullable=False, server_default=func.now())
     updated_at = db.Column(db.DateTime, index=False, unique=False, nullable=False, server_default=func.now())
 
     def __repr__(self):
-        return "<User {}>".format(self.google_id)
+        return "<User {}>".format(self.id)
 
     @property
     def is_active(self):
