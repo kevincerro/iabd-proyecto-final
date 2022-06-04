@@ -3,21 +3,27 @@ service: iabd-proyecto-final
 provider:
     deploymentMethod: direct
     name: aws
-    region: eu-west-3
+    region: eu-west-1
     stage: prod
     runtime: python3.9
     environment:
         STRIP_STAGE_PATH: yes
         FLASK_APP: main
         FLASK_ENV: production
+        SECRET_KEY: ${ssm:/iabd-proyecto-final-prod/secret_key}
+        DATABASE_URL: ${ssm:/iabd-proyecto-final-prod/database_url}
+        GOOGLE_ID: ${ssm:/iabd-proyecto-final-prod/google_id}
+        GOOGLE_SECRET: ${ssm:/iabd-proyecto-final-prod/google_secret}
         UPLOADS_BUCKET: ${construct:uploads.bucketName}
-        
     iam:
         role:
             statements:
                 -   Effect: "Allow"
                     Action:
                         - 'polly:SynthesizeSpeech'
+                        - 'transcribe:GetTranscriptionJob'
+                        - 'transcribe:StartTranscriptionJob'
+                        - 'rekognition:DetectText'
                     Resource: '*'
 
 plugins:
@@ -32,17 +38,20 @@ custom:
 functions:
     app:
         handler: wsgi_handler.handler
+        timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
         events:
             -   httpApi: '*'
 
 constructs:
     website:
         type: server-side-website
+        domain: ${ssm:/iabd-proyecto-final-prod/domain}
+        certificate: ${ssm:/iabd-proyecto-final-prod/certificate_arn}
         assets:
             '/static/*': static
     uploads:
         type: storage
-            
+
 package:
     patterns:
         - '!static/**'
@@ -50,4 +59,3 @@ package:
         - '!.idea/**'
         - '!.flaskenv'
         - '!.env'
-            
