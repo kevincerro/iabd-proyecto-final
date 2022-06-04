@@ -58,8 +58,6 @@ def speech_to_text(file_name):
 
 
 def image_to_text(file_name):
-    file_path = 's3://' + s3_bucket + '/image_to_text/' + file_name
-
     response = rekognition.detect_text(Image={
         'S3Object': {
             'Bucket': s3_bucket,

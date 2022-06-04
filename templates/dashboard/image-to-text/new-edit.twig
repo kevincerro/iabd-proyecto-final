@@ -30,6 +30,15 @@
                         {{ form.hidden_tag() }}
 
                         <div class="position-relative form-group">
+                            {{ form.engine.label }}
+                            {{ form.engine }}
+                            {% for error in form.engine.errors %}
+                                <br>
+                                <span style="color: red;">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="position-relative form-group">
                             <div>
                                 {{ form.image.label }}
                                 <div class="s3upload">

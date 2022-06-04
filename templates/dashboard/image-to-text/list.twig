@@ -35,6 +35,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Motor</th>
                                     <th>Imagen</th>
                                     <th>Texto</th>
                                     <th>Fecha de creación</th>
@@ -49,6 +50,7 @@
                                 {% for conversion in conversions | sort(attribute='id', reverse=True) %}
                                     <tr>
                                         <td>{{ conversion.id }}</td>
+                                        <td>{{ conversion.engine | capitalize }}</td>
                                         <td>
                                             {% set image_url = aws_service.get_presigned_file_url('image_to_text', conversion.image) %}
                                             <img width="35%" class="img-thumbnail" src="{{ image_url }}" alt="image-{{ conversion.id }}">
