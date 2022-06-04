@@ -15,4 +15,4 @@ class ImageToText(db.Model):
     created_at = db.Column(db.DateTime, index=False, unique=False, nullable=False, server_default=func.now())
 
     def __repr__(self):
-        return "<ImageToText {}>".format(self.google_id)
+        return "<ImageToText {}>".format(self.id)

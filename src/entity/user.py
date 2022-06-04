@@ -22,7 +22,7 @@ class User(UserMixin, db.Model):
     updated_at = db.Column(db.DateTime, index=False, unique=False, nullable=False, server_default=func.now())
 
     def __repr__(self):
-        return "<User {}>".format(self.google_id)
+        return "<User {}>".format(self.id)
 
     @property
     def is_active(self):
