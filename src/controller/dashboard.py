@@ -7,7 +7,7 @@ from src.entity.text_to_speech import TextToSpeech
 from src.form.image_to_text_form import ImageToTextForm
 from src.form.speech_to_text_form import SpeechToTextForm
 from src.form.text_to_speech_form import TextToSpeechForm
-from src.service import aws_service
+from src.service import aws_service, conversion_service
 
 mod = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
@@ -111,6 +111,7 @@ def new_image_to_text():
 
     if form.validate_on_submit():
         # Read form data
+        engine = form.engine.data
         file_name = form.file_name.data
         file_mime_type = form.file_mime_type.data
 
@@ -123,11 +124,12 @@ def new_image_to_text():
         if not dest_file:
             raise Exception('Uploaded object cannot be recovered.')
 
-        # Process with AWS Rekognition
-        text = aws_service.image_to_text(dest_file)
+        # Process with selected engine
+        text = conversion_service.image_to_text(engine, dest_file)
 
         # Store in db
         stt = ImageToText(
+            engine=engine,
             image=dest_file,
             text=text,
             created_by=current_user.id
