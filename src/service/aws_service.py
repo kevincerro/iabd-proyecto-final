@@ -11,6 +11,7 @@ UPLOADS_TEMP_DIR = 'tmp_uploads/'
 session = Session()
 polly = session.client('polly')
 transcribe = session.client('transcribe')
+rekognition = session.client('rekognition')
 s3 = session.client('s3')
 s3_bucket: str = os.getenv('UPLOADS_BUCKET')
 
@@ -54,6 +55,20 @@ def speech_to_text(file_name):
         time.sleep(1)
 
     raise Exception('Cannot convert speech-to-text')
+
+
+def image_to_text(file_name):
+    file_path = 's3://' + s3_bucket + '/image_to_text/' + file_name
+
+    response = rekognition.detect_text(Image={
+        'S3Object': {
+            'Bucket': s3_bucket,
+            'Name': 'image_to_text/' + file_name
+        }
+    })
+    texts = [text['DetectedText'] for text in response['TextDetections'] if text['Type'] == 'LINE']
+
+    return ' '.join(texts)
 
 
 def upload_speech_to_s3(blob):

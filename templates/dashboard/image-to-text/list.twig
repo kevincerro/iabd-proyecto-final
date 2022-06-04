@@ -51,7 +51,7 @@
                                         <td>{{ conversion.id }}</td>
                                         <td>
                                             {% set image_url = aws_service.get_presigned_file_url('image_to_text', conversion.image) %}
-                                            <img src="{{ image_url }}" alt="image-{{ conversion-id }}">
+                                            <img width="35%" class="img-thumbnail" src="{{ image_url }}" alt="image-{{ conversion.id }}">
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-dark" data-toggle="popover" data-placement="bottom" data-content="{{ conversion.text }}">
