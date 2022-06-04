@@ -33,13 +33,17 @@ def new_text_to_speech():
 
     if form.validate_on_submit():
         # Read form data
+        engine = form.engine.data
+        lang = form.lang.data
         text = form.text.data
 
         # Process with AWS Polly
-        file_name = aws_service.text_to_speech(text)
+        file_name = conversion_service.text_to_speech(engine, lang, text)
 
         # Store in db
         tts = TextToSpeech(
+            engine=engine,
+            lang=lang,
             text=text,
             speech=file_name,
             created_by=current_user.id
@@ -67,6 +71,8 @@ def new_speech_to_text():
 
     if form.validate_on_submit():
         # Read form data
+        engine = form.engine.data
+        lang = form.lang.data
         file_name = form.file_name.data
         file_mime_type = form.file_mime_type.data
 
@@ -80,10 +86,12 @@ def new_speech_to_text():
             raise Exception('Uploaded object cannot be recovered.')
 
         # Process with AWS Polly
-        text = aws_service.speech_to_text(dest_file)
+        text = conversion_service.speech_to_text(engine, lang, dest_file)
 
         # Store in db
         stt = SpeechToText(
+            engine=engine,
+            lang=lang,
             speech=dest_file,
             text=text,
             created_by=current_user.id

@@ -35,6 +35,8 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Motor</th>
+                                    <th>Idioma</th>
                                     <th>Audio</th>
                                     <th>Texto</th>
                                     <th>Fecha de creación</th>
@@ -49,6 +51,8 @@
                                 {% for conversion in conversions | sort(attribute='id', reverse=True) %}
                                     <tr>
                                         <td>{{ conversion.id }}</td>
+                                        <td>{{ conversion.engine | capitalize }}</td>
+                                        <td>{{ conversion.lang | upper }}</td>
                                         <td>
                                             {% set speech_url = aws_service.get_presigned_file_url('speech_to_text', conversion.speech) %}
                                             <audio controls>

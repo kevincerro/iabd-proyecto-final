@@ -6,6 +6,8 @@ from urllib.request import urlopen
 from boto3 import Session
 from botocore.exceptions import ClientError
 
+from src.service.conversion_service import LANG_ES, LANG_EN
+
 UPLOADS_TEMP_DIR = 'tmp_uploads/'
 
 session = Session()
@@ -20,11 +22,18 @@ def init(app):
     pass
 
 
-def text_to_speech(text):
+def text_to_speech(text, lang_raw):
+    if lang_raw == LANG_ES:
+        lang = 'es-ES'
+    elif lang_raw == LANG_EN:
+        lang = 'en-EN'
+    else:
+        raise Exception('Lang not supported')
+
     # Send to AWS Polly
     response = polly.synthesize_speech(
         Text=text,
-        LanguageCode='es-ES',
+        LanguageCode=lang,
         OutputFormat='mp3',
         VoiceId='Lucia'
     )
@@ -33,14 +42,21 @@ def text_to_speech(text):
     return upload_speech_to_s3(response['AudioStream'].read())
 
 
-def speech_to_text(file_name):
+def speech_to_text(file_name, lang_raw):
+    if lang_raw == LANG_ES:
+        lang = 'es-ES'
+    elif lang_raw == LANG_EN:
+        lang = 'en-EN'
+    else:
+        raise Exception('Lang not supported')
+
     file_path = 's3://' + s3_bucket + '/speech_to_text/' + file_name
 
     transcribe.start_transcription_job(
         TranscriptionJobName=file_name,
         Media={'MediaFileUri': file_path},
         MediaFormat='mp3',
-        LanguageCode='es-ES'
+        LanguageCode=lang
     )
 
     max_tries = 60

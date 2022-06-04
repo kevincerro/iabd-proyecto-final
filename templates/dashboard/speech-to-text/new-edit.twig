@@ -30,6 +30,24 @@
                         {{ form.hidden_tag() }}
 
                         <div class="position-relative form-group">
+                            {{ form.engine.label }}
+                            {{ form.engine }}
+                            {% for error in form.engine.errors %}
+                                <br>
+                                <span style="color: red;">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="position-relative form-group">
+                            {{ form.lang.label }}
+                            {{ form.lang }}
+                            {% for error in form.lang.errors %}
+                                <br>
+                                <span style="color: red;">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="position-relative form-group">
                             <div>
                                 {{ form.speech.label }}
                                 <div class="s3upload">
