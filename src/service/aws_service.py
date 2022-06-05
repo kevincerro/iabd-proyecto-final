@@ -5,8 +5,7 @@ import time
 from urllib.request import urlopen
 from boto3 import Session
 from botocore.exceptions import ClientError
-
-from src.service.conversion_service import LANG_ES, LANG_EN
+from main import LANG_ES, LANG_EN
 
 UPLOADS_TEMP_DIR = 'tmp_uploads/'
 
@@ -26,7 +25,7 @@ def text_to_speech(text, lang_raw):
     if lang_raw == LANG_ES:
         lang = 'es-ES'
     elif lang_raw == LANG_EN:
-        lang = 'en-EN'
+        lang = 'en-US'
     else:
         raise Exception('Lang not supported')
 
@@ -46,7 +45,7 @@ def speech_to_text(file_name, lang_raw):
     if lang_raw == LANG_ES:
         lang = 'es-ES'
     elif lang_raw == LANG_EN:
-        lang = 'en-EN'
+        lang = 'en-US'
     else:
         raise Exception('Lang not supported')
 
@@ -85,8 +84,8 @@ def image_to_text(file_name):
     return ' '.join(texts)
 
 
-def upload_speech_to_s3(blob):
-    with tempfile.NamedTemporaryFile(suffix='.mp3') as t:
+def upload_speech_to_s3(blob, suffix='.mp3'):
+    with tempfile.NamedTemporaryFile(suffix=suffix) as t:
         file_name = os.path.basename(t.name)
         s3.put_object(
             Body=blob,

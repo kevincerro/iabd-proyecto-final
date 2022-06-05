@@ -4,6 +4,20 @@ from flask_session import Session
 from werkzeug.middleware.proxy_fix import ProxyFix
 import os
 
+ENGINE_AWS = 'aws'
+ENGINE_AZURE = 'azure'
+ENGINES = (
+    (ENGINE_AWS, 'AWS'),
+    (ENGINE_AZURE, 'Azure')
+)
+
+LANG_ES = 'es'
+LANG_EN = 'en'
+LANGS = (
+    (LANG_ES, 'ES'),
+    (LANG_EN, 'EN')
+)
+
 # Initialize flask
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_host=1)
@@ -39,6 +53,8 @@ from src.service import user_manager
 user_manager.init(app)
 from src.service import aws_service
 aws_service.init(app)
+from src.service import azure_service
+azure_service.init(app)
 
 # Import controllers
 from src.controller import homepage
@@ -64,3 +80,5 @@ def error_not_found():
 @app.errorhandler(500)
 def error_internal_server_error():
     return '<p>500 Internal Server Error</p>'
+
+# db.create_all()

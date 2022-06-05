@@ -1,8 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import SubmitField, HiddenField, SelectField
-
-from src.service.conversion_service import ENGINES, LANGS
+from main import ENGINES, LANGS
 
 
 class SpeechToTextForm(FlaskForm):
