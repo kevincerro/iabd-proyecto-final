@@ -58,7 +58,7 @@ def speech_to_text(file_name, lang_raw):
         LanguageCode=lang
     )
 
-    max_tries = 60
+    max_tries = 25
     while max_tries > 0:
         max_tries -= 1
         job = transcribe.get_transcription_job(TranscriptionJobName=file_name)

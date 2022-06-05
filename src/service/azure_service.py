@@ -41,14 +41,14 @@ def text_to_speech(text, lang_raw):
 
     # Create speech client
     speech_config.speech_synthesis_language = lang
-    speech_client = speech.SpeechSynthesizer(
+    speech_synthesizer_client = speech.SpeechSynthesizer(
         speech_config=speech_config,
         audio_config=None
     )
 
     # Store audio in S3
     with tempfile.NamedTemporaryFile(suffix='.wav') as t:
-        result = speech_client.speak_text_async(text).get()
+        result = speech_synthesizer_client.speak_text_async(text).get()
         stream = AudioDataStream(result)
         stream.save_to_wav_file(t.name)
 
