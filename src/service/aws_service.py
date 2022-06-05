@@ -25,7 +25,7 @@ def text_to_speech(text, lang_raw):
     if lang_raw == LANG_ES:
         lang = 'es-ES'
     elif lang_raw == LANG_EN:
-        lang = 'en-EN'
+        lang = 'en-US'
     else:
         raise Exception('Lang not supported')
 
@@ -45,7 +45,7 @@ def speech_to_text(file_name, lang_raw):
     if lang_raw == LANG_ES:
         lang = 'es-ES'
     elif lang_raw == LANG_EN:
-        lang = 'en-EN'
+        lang = 'en-US'
     else:
         raise Exception('Lang not supported')
 
