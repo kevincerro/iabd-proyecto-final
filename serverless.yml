@@ -15,6 +15,12 @@ provider:
         GOOGLE_ID: ${ssm:/iabd-proyecto-final-prod/google_id}
         GOOGLE_SECRET: ${ssm:/iabd-proyecto-final-prod/google_secret}
         UPLOADS_BUCKET: ${construct:uploads.bucketName}
+        AZURE_FACE_KEY: ${ssm:/iabd-proyecto-final-prod/azure_face_key}
+        AZURE_FACE_ENDPOINT: ${ssm:/iabd-proyecto-final-prod/azure_face_endpoint}
+        AZURE_COMPUTER_VISION_KEY: ${ssm:/iabd-proyecto-final-prod/azure_computer_vision_key}
+        AZURE_COMPUTER_VISION_ENDPOINT: ${ssm:/iabd-proyecto-final-prod/azure_computer_vision_endpoint}
+        AZURE_SPEECH_KEY: ${ssm:/iabd-proyecto-final-prod/azure_speech_key}
+        AZURE_SPEECH_REGION: ${ssm:/iabd-proyecto-final-prod/azure_speech_region}
     iam:
         role:
             statements:
