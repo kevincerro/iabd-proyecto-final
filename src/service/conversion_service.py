@@ -1,19 +1,6 @@
+from main import ENGINE_AZURE, ENGINE_AWS
 from src.service import aws_service
 from src.service import azure_service
-
-ENGINE_AWS = 'aws'
-ENGINE_AZURE = 'azure'
-ENGINES = (
-    (ENGINE_AWS, 'AWS'),
-    (ENGINE_AZURE, 'Azure')
-)
-
-LANG_ES = 'es'
-LANG_EN = 'en'
-LANGS = (
-    (LANG_ES, 'ES'),
-    (LANG_EN, 'EN')
-)
 
 
 def text_to_speech(engine, lang, text):

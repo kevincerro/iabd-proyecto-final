@@ -1,8 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import SubmitField, HiddenField, SelectField
-
-from src.service.conversion_service import ENGINES
+from main import ENGINES
 
 
 class ImageToTextForm(FlaskForm):

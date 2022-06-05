@@ -4,6 +4,20 @@ from flask_session import Session
 from werkzeug.middleware.proxy_fix import ProxyFix
 import os
 
+ENGINE_AWS = 'aws'
+ENGINE_AZURE = 'azure'
+ENGINES = (
+    (ENGINE_AWS, 'AWS'),
+    (ENGINE_AZURE, 'Azure')
+)
+
+LANG_ES = 'es'
+LANG_EN = 'en'
+LANGS = (
+    (LANG_ES, 'ES'),
+    (LANG_EN, 'EN')
+)
+
 # Initialize flask
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_host=1)

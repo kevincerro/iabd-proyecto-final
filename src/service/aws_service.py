@@ -5,8 +5,7 @@ import time
 from urllib.request import urlopen
 from boto3 import Session
 from botocore.exceptions import ClientError
-
-from src.service.conversion_service import LANG_ES, LANG_EN
+from main import LANG_ES, LANG_EN
 
 UPLOADS_TEMP_DIR = 'tmp_uploads/'
 

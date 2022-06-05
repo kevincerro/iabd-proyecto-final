@@ -6,6 +6,7 @@ from azure.cognitiveservices.vision.computervision.models import VisualFeatureTy
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
 from msrest.authentication import CognitiveServicesCredentials
 from src.service import aws_service
+from main import LANG_ES, LANG_EN
 
 face_client = FaceClient(
     os.environ.get('AZURE_FACE_ENDPOINT'),
