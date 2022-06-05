@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for
 from flask_login import login_required, current_user
-from main import db
+from main import db, ENGINE_AWS
 from src.entity.speech_to_text import SpeechToText
 from src.form.speech_to_text_form import SpeechToTextForm
 from src.service import conversion_service, aws_service
@@ -23,7 +23,6 @@ def new_action():
 
     if form.validate_on_submit():
         # Read form data
-        engine = form.engine.data
         lang = form.lang.data
         file_name = form.file_name.data
         file_mime_type = form.file_mime_type.data
@@ -38,11 +37,10 @@ def new_action():
             raise Exception('Uploaded object cannot be recovered.')
 
         # Process with AWS Polly
-        text = conversion_service.speech_to_text(engine, lang, dest_file)
+        text = conversion_service.speech_to_text(ENGINE_AWS, lang, dest_file)
 
         # Store in db
         stt = SpeechToText(
-            engine=engine,
             lang=lang,
             speech=dest_file,
             text=text,
