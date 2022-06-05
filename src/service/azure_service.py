@@ -31,7 +31,7 @@ def init(app):
     pass
 
 
-def text_to_speech(text, lang_raw):
+def text_to_speech(text: str, lang_raw: str):
     if lang_raw == LANG_ES:
         lang = 'es-ES'
     elif lang_raw == LANG_EN:
@@ -80,59 +80,18 @@ def image_to_text(file_name: str):
     return ' '.join(texts)
 
 
-def detect_faces_in_image(url: str):
-    attributes = ['age', 'emotion']
-    detected_faces = face_client.face.detect_with_url(url=url, return_face_attributes=attributes)
+def image_analysis(file_name: str, lang_raw: str):
+    if lang_raw == LANG_ES:
+        lang = 'es'
+    elif lang_raw == LANG_EN:
+        lang = 'en'
+    else:
+        raise Exception('Lang not supported')
 
-    if not detected_faces:
-        return []
-
-    # Find emotion with better score
-    for face in detected_faces:
-        emotions = face.face_attributes.emotion
-        face.emotion = get_most_scored_emotion(emotions)
-
-    return detected_faces
-
-
-def get_most_scored_emotion(emotions):
-    scores = {
-        'anger': emotions.anger,
-        'contempt': emotions.contempt,
-        'disgust': emotions.disgust,
-        'fear': emotions.fear,
-        'happiness': emotions.happiness,
-        'neutral': emotions.neutral,
-        'sadness': emotions.sadness,
-        'surprise': emotions.surprise,
-    }
-
-    name = max(scores, key=scores.get)
-
-    return {
-        'name': name,
-        'score': scores[name],
-    }
-
-
-def describe_image(url: str, lang: str):
-    analysis = vision_client.describe_image(url, 1, lang)
+    file_url = aws_service.get_presigned_file_url('image_to_text', file_name)
+    analysis = vision_client.describe_image(file_url, 1, lang)
 
     if not analysis:
         raise Exception('No analysis returned.')
 
     return analysis.captions[0].text
-
-
-def analyze_image(url: str, lang: str):
-    features = [
-        VisualFeatureTypes.tags,
-        VisualFeatureTypes.color,
-    ]
-
-    analysis = vision_client.analyze_image(url, visual_features=features, language=lang)
-
-    tags = [tag.name for tag in analysis.tags]
-    color = analysis.color.accent_color
-
-    return tags, color

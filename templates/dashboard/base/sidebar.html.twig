@@ -49,6 +49,11 @@
                         <i class="metismenu-icon pe-7s-photo"></i>Image-To-Text
                     </a>
                 </li>
+                <li>
+                    <a href="{{ url_for('dashboard_image_analysis.list_action') }}" class="{{ 'mm-active' if request.endpoint == 'dashboard_image_analysis.list_action' }}">
+                        <i class="metismenu-icon pe-7s-tools"></i>Image Analysis
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

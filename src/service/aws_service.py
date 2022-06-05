@@ -21,7 +21,7 @@ def init(app):
     pass
 
 
-def text_to_speech(text, lang_raw):
+def text_to_speech(text: str, lang_raw: str):
     if lang_raw == LANG_ES:
         lang = 'es-ES'
     elif lang_raw == LANG_EN:
@@ -41,7 +41,7 @@ def text_to_speech(text, lang_raw):
     return upload_speech_to_s3(response['AudioStream'].read())
 
 
-def speech_to_text(file_name, lang_raw):
+def speech_to_text(file_name: str, lang_raw: str):
     if lang_raw == LANG_ES:
         lang = 'es-ES'
     elif lang_raw == LANG_EN:
@@ -72,7 +72,7 @@ def speech_to_text(file_name, lang_raw):
     raise Exception('Cannot convert speech-to-text')
 
 
-def image_to_text(file_name):
+def image_to_text(file_name: str):
     response = rekognition.detect_text(Image={
         'S3Object': {
             'Bucket': s3_bucket,
@@ -84,7 +84,7 @@ def image_to_text(file_name):
     return ' '.join(texts)
 
 
-def upload_speech_to_s3(blob, suffix='.mp3'):
+def upload_speech_to_s3(blob: str, suffix: str = '.mp3'):
     with tempfile.NamedTemporaryFile(suffix=suffix) as t:
         file_name = os.path.basename(t.name)
         s3.put_object(
@@ -96,7 +96,7 @@ def upload_speech_to_s3(blob, suffix='.mp3'):
         return file_name
 
 
-def get_presigned_file_url(folder, file_name):
+def get_presigned_file_url(folder: str, file_name: str):
     return s3.generate_presigned_url(
         'get_object',
         Params={
@@ -112,7 +112,7 @@ def generate_random_file_name():
         return os.path.basename(file_name.name)
 
 
-def get_presigned_upload_url(file_name):
+def get_presigned_upload_url(file_name: str):
     return s3.generate_presigned_url(
         'put_object',
         Params={
@@ -123,7 +123,7 @@ def get_presigned_upload_url(file_name):
     )
 
 
-def does_object_exists_in_temp(file_name):
+def does_object_exists_in_temp(file_name: str):
     file_name_without_extension = file_name.split('.')[0]
     path = UPLOADS_TEMP_DIR + file_name_without_extension
 
@@ -134,7 +134,7 @@ def does_object_exists_in_temp(file_name):
         return False
 
 
-def copy_object_from_temp_to_dest(file_name, dest_folder, mime_type):
+def copy_object_from_temp_to_dest(file_name: str, dest_folder: str, mime_type: str):
     file_name_without_extension = file_name.split('.')[0]
     source_file = s3_bucket + '/' + UPLOADS_TEMP_DIR + file_name_without_extension
     dest_file_name = generate_random_file_name()
@@ -151,7 +151,7 @@ def copy_object_from_temp_to_dest(file_name, dest_folder, mime_type):
     return dest_file_name
 
 
-def delete_object_from_temp(file_name):
+def delete_object_from_temp(file_name: str):
     file_name_without_extension = file_name.split('.')[0]
 
     s3.delete_object(

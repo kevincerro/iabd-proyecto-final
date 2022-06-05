@@ -20,6 +20,7 @@ class User(UserMixin, db.Model):
     text_to_speech = relationship('TextToSpeech')
     speech_to_text = relationship('SpeechToText')
     image_to_text = relationship('ImageToText')
+    image_analysis = relationship('ImageAnalysis')
     created_at = db.Column(db.DateTime, index=False, unique=False, nullable=False, server_default=func.now())
     updated_at = db.Column(db.DateTime, index=False, unique=False, nullable=False, server_default=func.now())
 

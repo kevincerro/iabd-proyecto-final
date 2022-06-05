@@ -45,6 +45,8 @@ from src.entity import speech_to_text
 speech_to_text.init()
 from src.entity import image_to_text
 image_to_text.init()
+from src.entity import image_analysis
+image_analysis.init()
 
 # Import services
 from src.service import google_login
@@ -67,6 +69,8 @@ from src.controller import speech_to_text
 app.register_blueprint(speech_to_text.mod)
 from src.controller import image_to_text
 app.register_blueprint(image_to_text.mod)
+from src.controller import image_analysis
+app.register_blueprint(image_analysis.mod)
 
 # Configure jinja global variables
 app.jinja_env.globals.update(aws_service=aws_service)
@@ -80,5 +84,3 @@ def error_not_found():
 @app.errorhandler(500)
 def error_internal_server_error():
     return '<p>500 Internal Server Error</p>'
-
-# db.create_all()
