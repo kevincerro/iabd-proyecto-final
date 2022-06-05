@@ -84,8 +84,8 @@ def image_to_text(file_name):
     return ' '.join(texts)
 
 
-def upload_speech_to_s3(blob):
-    with tempfile.NamedTemporaryFile(suffix='.mp3') as t:
+def upload_speech_to_s3(blob, suffix='.mp3'):
+    with tempfile.NamedTemporaryFile(suffix=suffix) as t:
         file_name = os.path.basename(t.name)
         s3.put_object(
             Body=blob,

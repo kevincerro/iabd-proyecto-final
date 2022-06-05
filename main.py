@@ -53,6 +53,8 @@ from src.service import user_manager
 user_manager.init(app)
 from src.service import aws_service
 aws_service.init(app)
+from src.service import azure_service
+azure_service.init(app)
 
 # Import controllers
 from src.controller import homepage
@@ -78,3 +80,5 @@ def error_not_found():
 @app.errorhandler(500)
 def error_internal_server_error():
     return '<p>500 Internal Server Error</p>'
+
+# db.create_all()

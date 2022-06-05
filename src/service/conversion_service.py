@@ -6,6 +6,8 @@ from src.service import azure_service
 def text_to_speech(engine, lang, text):
     if engine == ENGINE_AWS:
         return aws_service.text_to_speech(text, lang)
+    elif engine == ENGINE_AZURE:
+        return azure_service.text_to_speech(text, lang)
     else:
         raise Exception('Engine not supported')
 
