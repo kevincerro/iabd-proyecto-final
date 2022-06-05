@@ -45,6 +45,12 @@ from src.controller import homepage
 app.register_blueprint(homepage.mod)
 from src.controller import dashboard
 app.register_blueprint(dashboard.mod)
+from src.controller import text_to_speech
+app.register_blueprint(text_to_speech.mod)
+from src.controller import speech_to_text
+app.register_blueprint(speech_to_text.mod)
+from src.controller import image_to_text
+app.register_blueprint(image_to_text.mod)
 
 # Configure jinja global variables
 app.jinja_env.globals.update(aws_service=aws_service)

@@ -35,17 +35,17 @@
             <ul class="vertical-nav-menu">
                 <li class="app-sidebar__heading">Servicios</li>
                 <li>
-                    <a href="{{ url_for('dashboard.text_to_speech') }}" class="{{ 'mm-active' if request.endpoint in 'dashboard.text_to_speech' }} strong">
+                    <a href="{{ url_for('dashboard_text_to_speech.list_action') }}" class="{{ 'mm-active' if request.endpoint in 'dashboard_text_to_speech.list_action' }} strong">
                         <i class="metismenu-icon pe-7s-speaker"></i>Text-To-Speech
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url_for('dashboard.speech_to_text') }}" class="{{ 'mm-active' if request.endpoint == 'dashboard.speech_to_text' }}">
+                    <a href="{{ url_for('dashboard_speech_to_text.list_action') }}" class="{{ 'mm-active' if request.endpoint == 'dashboard_speech_to_text.list_action' }}">
                         <i class="metismenu-icon pe-7s-note"></i>Speech-To-Text
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url_for('dashboard.image_to_text') }}" class="{{ 'mm-active' if request.endpoint == 'dashboard.image_to_text' }}">
+                    <a href="{{ url_for('dashboard_image_to_text.list_action') }}" class="{{ 'mm-active' if request.endpoint == 'dashboard_image_to_text.list_action' }}">
                         <i class="metismenu-icon pe-7s-photo"></i>Image-To-Text
                     </a>
                 </li>
