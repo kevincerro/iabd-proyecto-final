@@ -1,15 +1,11 @@
 import os
-import tempfile
 import time
-from azure.cognitiveservices.speech import speech, SpeechConfig, AudioDataStream
 from azure.cognitiveservices.vision.face import FaceClient
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
-from azure.cognitiveservices.vision.computervision.models import VisualFeatureTypes
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
 from msrest.authentication import CognitiveServicesCredentials
 from src.service import aws_service
 from main import LANG_ES, LANG_EN
-from src.service.aws_service import upload_speech_to_s3
 
 face_client = FaceClient(
     os.environ.get('AZURE_FACE_ENDPOINT'),
@@ -21,38 +17,8 @@ vision_client = ComputerVisionClient(
     CognitiveServicesCredentials(os.environ.get('AZURE_COMPUTER_VISION_KEY'))
 )
 
-speech_config = SpeechConfig(
-    subscription=os.environ.get('AZURE_SPEECH_KEY'),
-    region=os.environ.get('AZURE_SPEECH_REGION')
-)
-
-
 def init(app):
     pass
-
-
-def text_to_speech(text: str, lang_raw: str):
-    if lang_raw == LANG_ES:
-        lang = 'es-ES'
-    elif lang_raw == LANG_EN:
-        lang = 'en-US'
-    else:
-        raise Exception('Lang not supported')
-
-    # Create speech client
-    speech_config.speech_synthesis_language = lang
-    speech_synthesizer_client = speech.SpeechSynthesizer(
-        speech_config=speech_config,
-        audio_config=None
-    )
-
-    # Store audio in S3
-    with tempfile.NamedTemporaryFile(suffix='.wav') as t:
-        result = speech_synthesizer_client.speak_text_async(text).get()
-        stream = AudioDataStream(result)
-        stream.save_to_wav_file(t.name)
-
-        return upload_speech_to_s3(open(t.name, 'rb'), '.wav')
 
 
 def image_to_text(file_name: str):

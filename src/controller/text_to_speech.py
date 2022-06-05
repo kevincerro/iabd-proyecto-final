@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for
 from flask_login import login_required, current_user
-from main import db
+from main import db, ENGINE_AWS
 from src.entity.text_to_speech import TextToSpeech
 from src.form.text_to_speech_form import TextToSpeechForm
 from src.service import conversion_service
@@ -23,16 +23,15 @@ def new_action():
 
     if form.validate_on_submit():
         # Read form data
-        engine = form.engine.data
         lang = form.lang.data
         text = form.text.data
 
         # Process with AWS Polly
-        file_name = conversion_service.text_to_speech(engine, lang, text)
+        file_name = conversion_service.text_to_speech(ENGINE_AWS, lang, text)
 
         # Store in db
         tts = TextToSpeech(
-            engine=engine,
+            engine=ENGINE_AWS,
             lang=lang,
             text=text,
             speech=file_name,
